@@ -161,6 +161,22 @@ export default function App() {
 
         <Toaster position="top-right" theme="dark" richColors />
         <InstallPrompt />
+        <div className="fixed bottom-0 left-0 right-0 h-16 bg-black border-t border-white/10 flex items-center justify-around md:hidden z-50">
+        <button className="flex flex-col items-center text-white/70 hover:text-white">
+        <span>🏠</span>
+        <span className="text-xs">Home</span>
+       </button>
+
+        <button className="flex flex-col items-center text-white/70 hover:text-white">
+        <span>🔍</span>
+        <span className="text-xs">Search</span>
+        </button>
+
+        <button className="flex flex-col items-center text-white/70 hover:text-white">
+        <span>📚</span>
+        <span className="text-xs">Library</span>
+        </button>
+        </div>
       </main>
     </div>
   );
