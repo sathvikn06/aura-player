@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'email', 'displayName', 'photoURL']) &&
+             data.uid is string &&
+             data.email is string &&
+             data.displayName is string &&
+             data.photoURL is string;
+    }
+
+    function isValidPlaylist(data) {
+      return data.keys().hasAll(['userId', 'name']) &&
+             data.userId is string &&
+             data.name is string &&
+             data.name.size() > 0 && data.name.size() < 100;
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(userId) && isValidUserProfile(request.resource.data);
+      
+      // Playlists
+      match /playlists/{playlistId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidPlaylist(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+      
+      // Favorites
+      match /favorites/{favoriteId} {
+        allow read: if isOwner(userId);
+        allow create, delete: if isOwner(userId);
+      }
+    }
+  }
+}
