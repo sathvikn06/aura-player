@@ -54,7 +54,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen w-screen flex bg-background text-white overflow-hidden font-sans">
+    <div className="h-screen w-screen flex flex-col md:flex-row bg-background text-white overflow-hidden font-sans">
       <Sidebar 
         onUploadClick={() => setIsUploadOpen(true)} 
         onSearchClick={() => searchInputRef.current?.focus()}
@@ -63,7 +63,7 @@ export default function App() {
 
       <main className="flex-1 flex flex-col relative overflow-hidden">
         {/* Header */}
-        <header className="h-16 px-8 flex items-center justify-between z-10">
+        <header className="h-16 px-4 md:px-8 flex items-center justify-between z-10">
           <div className="flex items-center gap-6 flex-1">
             <div className="flex items-center gap-2">
               <button className="p-1.5 rounded-full hover:bg-white/5 transition-colors text-white/40 hover:text-white">
@@ -105,7 +105,7 @@ export default function App() {
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto px-8 pb-32 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto px-4 md:px-8 pb-32 custom-scrollbar">
           {/* Hero Section */}
           <section className="mb-10 relative">
             <div className="relative h-64 rounded-2xl overflow-hidden bg-surface flex items-center p-10 border border-white/5">
