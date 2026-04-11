@@ -48,7 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
   };
 
   return (
-    <div className="w-60 h-full flex flex-col bg-background border-r border-white/5 py-8 px-4">
+    <div className="hidden md:flex w-60 h-full flex-col bg-background border-r border-white/5 py-8 px-4">
       <div className="flex items-center gap-2.5 px-4 mb-10">
         <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
           <span className="font-bold text-black text-lg">A</span>
