@@ -14,14 +14,28 @@ interface PlayerState {
   repeatMode: 'none' | 'one' | 'all';
   isFullscreen: boolean;
   visualMode: 'artwork' | 'cinema';
+  visualizerMode: 'bars' | 'waves' | 'particles';
   isLoading: boolean;
   user: UserProfile | null;
   searchQuery: string;
+  filterArtist: string | null;
   playlists: Playlist[];
   likedSongIds: string[];
   activePlaylistId: string | null;
+  songs: Song[];
+  equalizer: number[]; // 10 bands: 32, 64, 125, 250, 500, 1k, 2k, 4k, 8k, 16k
+  recentlyPlayed: Song[];
+  sleepTimer: number | null; // minutes remaining
+  previousVolume: number;
+  customBackgrounds: { id: string; url: string; name: string }[];
   
   // Actions
+  addCustomBackground: (url: string, name: string) => void;
+  removeCustomBackground: (id: string) => void;
+  setSongs: (songs: Song[]) => void;
+  setEqualizer: (bands: number[]) => void;
+  setSleepTimer: (minutes: number | null) => void;
+  addToRecentlyPlayed: (song: Song) => void;
   setCurrentSong: (song: Song | null) => void;
   setQueue: (songs: Song[]) => void;
   reorderQueue: (startIndex: number, endIndex: number) => void;
@@ -34,9 +48,11 @@ interface PlayerState {
   setRepeatMode: (mode: 'none' | 'one' | 'all') => void;
   toggleFullscreen: () => void;
   setVisualMode: (mode: 'artwork' | 'cinema') => void;
+  setVisualizerMode: (mode: 'bars' | 'waves' | 'particles') => void;
   setIsLoading: (isLoading: boolean) => void;
   setUser: (user: UserProfile | null) => void;
   setSearchQuery: (query: string) => void;
+  setFilterArtist: (artist: string | null) => void;
   
   // Playlist Actions
   createPlaylist: (name: string) => void;
@@ -46,6 +62,7 @@ interface PlayerState {
   renamePlaylist: (playlistId: string, name: string) => void;
   deletePlaylist: (playlistId: string) => void;
   setActivePlaylist: (id: string | null) => void;
+  toggleMute: () => void;
   
   // Playback controls
   nextSong: () => void;
@@ -67,17 +84,49 @@ export const usePlayerStore = create<PlayerState>()(
       repeatMode: 'none',
       isFullscreen: false,
       visualMode: 'artwork',
+      visualizerMode: 'bars',
       isLoading: false,
       user: null,
       searchQuery: '',
+      filterArtist: null,
       playlists: [],
       likedSongIds: [],
       activePlaylistId: null,
+      songs: [],
+      equalizer: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      recentlyPlayed: [],
+      sleepTimer: null,
+      previousVolume: 0.7,
+      customBackgrounds: [],
 
+      addCustomBackground: (url, name) => set((state) => ({
+        customBackgrounds: [...state.customBackgrounds, { id: crypto.randomUUID(), url, name }]
+      })),
+      removeCustomBackground: (id) => set((state) => ({
+        customBackgrounds: state.customBackgrounds.filter(bg => bg.id !== id)
+      })),
+      setSongs: (songs) => set({ songs }),
+      setEqualizer: (equalizer) => set({ equalizer }),
+      setSleepTimer: (minutes) => set({ sleepTimer: minutes }),
+      addToRecentlyPlayed: (song) => set((state) => {
+        const filtered = state.recentlyPlayed.filter(s => s.id !== song.id);
+        return { recentlyPlayed: [song, ...filtered].slice(0, 20) };
+      }),
       setCurrentSong: (song) => {
-        const { queue } = get();
+        const { queue, songs } = get();
         const index = song ? queue.findIndex(s => s.id === song.id) : -1;
+        
+        if (song) {
+          const updatedSongs = songs.map(s => 
+            s.id === song.id ? { ...s, playCount: (s.playCount || 0) + 1 } : s
+          );
+          set({ songs: updatedSongs });
+        }
+
         set({ currentSong: song, currentIndex: index, progress: 0 });
+        if (song) {
+          get().addToRecentlyPlayed(song);
+        }
       },
       setQueue: (songs) => {
         const { currentSong } = get();
@@ -131,9 +180,11 @@ export const usePlayerStore = create<PlayerState>()(
       setRepeatMode: (mode) => set({ repeatMode: mode }),
       toggleFullscreen: () => set((state) => ({ isFullscreen: !state.isFullscreen })),
       setVisualMode: (mode) => set({ visualMode: mode }),
+      setVisualizerMode: (mode) => set({ visualizerMode: mode }),
       setIsLoading: (isLoading) => set({ isLoading }),
       setUser: (user) => set({ user }),
-      setSearchQuery: (query) => set({ searchQuery: query }),
+      setSearchQuery: (query) => set({ searchQuery: query, filterArtist: null }),
+      setFilterArtist: (artist) => set({ filterArtist: artist, searchQuery: '' }),
 
       createPlaylist: (name) => set((state) => ({
         playlists: [...state.playlists, { id: crypto.randomUUID(), name, songIds: [] }]
@@ -173,6 +224,15 @@ export const usePlayerStore = create<PlayerState>()(
       })),
 
       setActivePlaylist: (id) => set({ activePlaylistId: id }),
+
+      toggleMute: () => {
+        const { volume, previousVolume } = get();
+        if (volume > 0) {
+          set({ previousVolume: volume, volume: 0 });
+        } else {
+          set({ volume: previousVolume || 0.7 });
+        }
+      },
 
       playFromQueue: (index) => {
         const { queue } = get();
@@ -230,6 +290,7 @@ export const usePlayerStore = create<PlayerState>()(
         playlists: state.playlists,
         likedSongIds: state.likedSongIds,
         volume: state.volume,
+        customBackgrounds: state.customBackgrounds,
       }),
     }
   )

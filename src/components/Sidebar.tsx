@@ -48,12 +48,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
   };
 
   return (
-    <div className="hidden md:flex w-60 h-full flex-col bg-background border-r border-white/5 py-8 px-4">
+    <div className="w-60 h-full flex flex-col bg-surface/40 backdrop-blur-xl border-r border-glass-border py-8 px-4">
       <div className="flex items-center gap-2.5 px-4 mb-10">
-        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
-          <span className="font-bold text-black text-lg">A</span>
+        <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+          <span className="font-bold text-white text-lg">A</span>
         </div>
-        <h1 className="text-xl font-bold tracking-tight">Aura</h1>
+        <h1 className="text-xl font-bold tracking-tight text-text-primary">Aura</h1>
+      </div>
+
+      <div className="px-4 mb-6">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-accent/10 border border-accent/20 rounded-lg">
+          <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+          <span className="text-[10px] font-bold text-accent uppercase tracking-widest">Tollywood Theme</span>
+        </div>
       </div>
 
       <nav className="space-y-8 flex-1 overflow-y-auto custom-scrollbar">
@@ -63,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
               key={item.label}
               onClick={item.onClick}
               className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg transition-all text-sm font-medium ${
-                item.active ? 'bg-white/5 text-white' : 'text-white/40 hover:text-white hover:bg-white/5'
+                item.active ? 'bg-accent/10 text-accent' : 'text-text-secondary hover:text-text-primary hover:bg-glass'
               }`}
             >
               <item.icon size={18} strokeWidth={item.active ? 2.5 : 2} />
@@ -73,12 +80,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
         </div>
 
         <div className="space-y-1">
-          <p className="px-4 text-[10px] font-bold text-white/20 uppercase tracking-widest mb-3">Library</p>
+          <p className="px-4 text-[10px] font-bold text-text-secondary/40 uppercase tracking-widest mb-3">Library</p>
           
           <button
             onClick={() => setActivePlaylist('liked')}
             className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg transition-all text-sm font-medium ${
-              activePlaylistId === 'liked' ? 'bg-white/5 text-accent' : 'text-white/40 hover:text-white hover:bg-white/5'
+              activePlaylistId === 'liked' ? 'bg-accent/10 text-accent' : 'text-text-secondary hover:text-text-primary hover:bg-glass'
             }`}
           >
             <Heart size={18} fill={activePlaylistId === 'liked' ? 'currentColor' : 'none'} strokeWidth={activePlaylistId === 'liked' ? 2.5 : 2} />
@@ -94,13 +101,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
                 onChange={(e) => setNewPlaylistName(e.target.value)}
                 onBlur={() => !newPlaylistName && setIsCreating(false)}
                 placeholder="Playlist name..."
-                className="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-xs outline-none focus:border-accent transition-colors"
+                className="w-full bg-glass border border-glass-border rounded px-2 py-1 text-xs outline-none focus:border-accent transition-colors"
               />
             </form>
           ) : (
             <button
               onClick={() => setIsCreating(true)}
-              className="flex items-center gap-3 w-full px-4 py-2 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
+              className="flex items-center gap-3 w-full px-4 py-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-glass transition-all text-sm font-medium"
             >
               <PlusSquare size={18} />
               <span>Create Playlist</span>
@@ -110,7 +117,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
           {user && (
             <button
               onClick={onUploadClick}
-              className="flex items-center gap-3 w-full px-4 py-2 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
+              className="flex items-center gap-3 w-full px-4 py-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-glass transition-all text-sm font-medium"
             >
               <Upload size={18} />
               <span>Upload Song</span>
@@ -120,12 +127,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
 
         {playlists.length > 0 && (
           <div className="space-y-1">
-            <p className="px-4 text-[10px] font-bold text-white/20 uppercase tracking-widest mb-3">Playlists</p>
+            <p className="px-4 text-[10px] font-bold text-text-secondary/40 uppercase tracking-widest mb-3">Playlists</p>
             {playlists.map((playlist) => (
               <div key={playlist.id} className="relative group">
                 {editingId === playlist.id ? (
                   <div className="px-4 py-1">
-                    <div className="flex items-center gap-1 bg-white/5 border border-white/10 rounded px-2 py-1">
+                    <div className="flex items-center gap-1 bg-glass border border-glass-border rounded px-2 py-1">
                       <input
                         autoFocus
                         type="text"
@@ -144,7 +151,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
                     <button
                       onClick={() => setActivePlaylist(playlist.id)}
                       className={`flex items-center gap-3 flex-1 px-4 py-2 rounded-lg transition-all text-sm font-medium text-left min-w-0 ${
-                        activePlaylistId === playlist.id ? 'bg-white/5 text-white' : 'text-white/40 hover:text-white hover:bg-white/5'
+                        activePlaylistId === playlist.id ? 'bg-accent/10 text-accent' : 'text-text-secondary hover:text-text-primary hover:bg-glass'
                       }`}
                     >
                       <ListMusic size={18} strokeWidth={activePlaylistId === playlist.id ? 2.5 : 2} className="flex-shrink-0" />
@@ -154,7 +161,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
                     <div className="absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button 
                         onClick={(e) => { e.stopPropagation(); setShowMenuId(showMenuId === playlist.id ? null : playlist.id); }}
-                        className="p-1.5 text-white/20 hover:text-white"
+                        className="p-1.5 text-text-secondary/40 hover:text-text-primary"
                       >
                         <MoreVertical size={14} />
                       </button>
@@ -168,18 +175,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
                             initial={{ opacity: 0, scale: 0.95, x: 10 }}
                             animate={{ opacity: 1, scale: 1, x: 0 }}
                             exit={{ opacity: 0, scale: 0.95, x: 10 }}
-                            className="absolute left-full ml-2 top-0 w-32 bg-surface border border-white/5 rounded-lg py-1 z-50 shadow-2xl"
+                            className="absolute left-full ml-2 top-0 w-32 bg-surface border border-glass-border rounded-lg py-1 z-50 shadow-2xl"
                           >
                             <button
                               onClick={() => startEditing(playlist.id, playlist.name)}
-                              className="w-full text-left px-3 py-1.5 text-[11px] text-white/60 hover:text-white hover:bg-white/5 flex items-center gap-2"
+                              className="w-full text-left px-3 py-1.5 text-[11px] text-text-secondary hover:text-text-primary hover:bg-glass flex items-center gap-2"
                             >
                               <Edit2 size={12} />
                               Rename
                             </button>
                             <button
                               onClick={() => { deletePlaylist(playlist.id); setShowMenuId(null); }}
-                              className="w-full text-left px-3 py-1.5 text-[11px] text-red-400/60 hover:text-red-400 hover:bg-white/5 flex items-center gap-2"
+                              className="w-full text-left px-3 py-1.5 text-[11px] text-red-400/60 hover:text-red-400 hover:bg-glass flex items-center gap-2"
                             >
                               <Trash2 size={12} />
                               Delete
@@ -196,24 +203,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ onUploadClick, onSearchClick, 
         )}
       </nav>
 
-      <div className="mt-auto pt-6 border-t border-white/5">
+      <div className="mt-auto pt-6 border-t border-glass-border">
         {user ? (
           <div className="flex items-center justify-between px-2">
             <div className="flex items-center gap-3">
-              <img src={user.photoURL} alt={user.displayName} className="w-8 h-8 rounded-full bg-white/10" />
+              <img src={user.photoURL} alt={user.displayName} className="w-8 h-8 rounded-full bg-accent/10" />
               <div className="flex flex-col">
                 <span className="text-xs font-semibold truncate w-24">{user.displayName}</span>
-                <span className="text-[10px] text-white/20">Pro Member</span>
+                <span className="text-[10px] text-text-secondary/40">Pro Member</span>
               </div>
             </div>
-            <button onClick={logout} className="p-2 text-white/20 hover:text-white transition-colors">
+            <button onClick={logout} className="p-2 text-text-secondary/40 hover:text-text-primary transition-colors">
               <LogOut size={16} />
             </button>
           </div>
         ) : (
           <button
             onClick={login}
-            className="flex items-center gap-3 w-full p-2.5 rounded-xl bg-white text-black hover:opacity-90 transition-all text-sm font-bold justify-center"
+            className="flex items-center gap-3 w-full p-2.5 rounded-xl bg-accent text-white hover:opacity-90 transition-all text-sm font-bold justify-center"
           >
             <User size={18} />
             <span>Sign In</span>

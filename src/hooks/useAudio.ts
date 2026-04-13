@@ -21,8 +21,37 @@ export const useAudio = () => {
     setIsLoading,
     nextSong,
     repeatMode,
-    isFullscreen
+    isFullscreen,
+    equalizer,
+    sleepTimer,
+    setSleepTimer
   } = usePlayerStore();
+
+  // Handle sleep timer
+  useEffect(() => {
+    if (sleepTimer === null || sleepTimer <= 0) return;
+
+    const interval = setInterval(() => {
+      const { sleepTimer, setSleepTimer, setIsPlaying } = usePlayerStore.getState();
+      if (sleepTimer !== null) {
+        if (sleepTimer <= 1) {
+          setIsPlaying(false);
+          setSleepTimer(null);
+        } else {
+          setSleepTimer(sleepTimer - 1);
+        }
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, [sleepTimer]);
+
+  // Handle equalizer updates
+  useEffect(() => {
+    if (audioController.audioContext) {
+      audioController.updateEqualizer(equalizer);
+    }
+  }, [equalizer]);
 
   // Initialize visualizer context on first interaction or when entering fullscreen
   useEffect(() => {
@@ -129,7 +158,12 @@ export const useAudio = () => {
 
   // Handle volume
   useEffect(() => {
-    audio.volume = volume;
+    if (audioController.audioContext && audioController.masterGain) {
+      audioController.setMasterGain(volume);
+      audio.volume = 1.0; // Keep element volume at max to let masterGain control it
+    } else {
+      audio.volume = Math.min(volume, 1.0); // Fallback for non-initialized context
+    }
   }, [volume, audio]);
 
   // Handle source changes

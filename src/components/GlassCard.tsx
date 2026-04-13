@@ -11,7 +11,7 @@ interface GlassCardProps {
 export const GlassCard: React.FC<GlassCardProps> = ({ children, className, hover = true }) => {
   return (
     <motion.div
-      whileHover={hover ? { scale: 1.02, backgroundColor: 'rgba(255, 255, 255, 0.08)' } : {}}
+      whileHover={hover ? { scale: 1.02, backgroundColor: 'var(--color-glass)' } : {}}
       className={cn(
         "glass rounded-2xl p-4 transition-all duration-300",
         className

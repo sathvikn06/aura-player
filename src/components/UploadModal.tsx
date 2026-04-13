@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Upload, Music, User, Image as ImageIcon, Loader2 } from 'lucide-react';
-import { NeonButton } from './NeonButton';
+import { PremiumButton } from './PremiumButton';
 import { GlassCard } from './GlassCard';
 import { songService } from '../services/songService';
 import { toast } from 'sonner';
@@ -70,20 +70,20 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSuc
           />
           
           <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
             className="relative w-full max-w-lg"
           >
-            <GlassCard hover={false} className="p-8 border-white/10">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-neon-cyan">Upload New Track</h2>
-                <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+            <GlassCard hover={false} className="p-6 md:p-8 border-glass-border bg-surface">
+              <div className="flex items-center justify-between mb-6 md:mb-8">
+                <h2 className="text-xl md:text-2xl font-bold tracking-tight text-text-primary">Upload New Track</h2>
+                <button onClick={onClose} className="p-2 hover:bg-glass rounded-full transition-colors text-text-secondary hover:text-text-primary">
                   <X size={20} />
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
                 {/* File Input */}
                 <div className="relative">
                   <input
@@ -96,17 +96,17 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSuc
                   />
                   <label
                     htmlFor="audio-upload"
-                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/10 rounded-2xl hover:border-neon-cyan/50 hover:bg-neon-cyan/5 transition-all cursor-pointer group"
+                    className="flex flex-col items-center justify-center w-full h-28 md:h-32 border-2 border-dashed border-glass-border rounded-2xl hover:border-accent/20 hover:bg-accent/5 transition-all cursor-pointer group"
                   >
                     {file ? (
-                      <div className="flex items-center gap-3 text-neon-cyan">
-                        <Music size={24} />
-                        <span className="font-medium truncate max-w-[200px]">{file.name}</span>
+                      <div className="flex items-center gap-3 text-text-primary">
+                        <Music size={24} className="text-accent" />
+                        <span className="font-medium truncate max-w-[200px] text-sm">{file.name}</span>
                       </div>
                     ) : (
                       <>
-                        <Upload size={32} className="text-gray-500 group-hover:text-neon-cyan transition-colors mb-2" />
-                        <span className="text-sm text-gray-500 group-hover:text-gray-300">Select Audio File</span>
+                        <Upload size={28} className="text-text-secondary/40 group-hover:text-accent/60 transition-colors mb-2" />
+                        <span className="text-xs md:text-sm text-text-secondary/40 group-hover:text-accent/60">Select Audio File</span>
                       </>
                     )}
                   </label>
@@ -114,45 +114,45 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSuc
 
                 <div className="space-y-4">
                   <div className="relative">
-                    <Music className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                    <Music className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary/40" size={18} />
                     <input
                       type="text"
                       placeholder="Track Title"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:border-neon-cyan outline-none transition-colors"
+                      className="w-full bg-glass border border-glass-border rounded-xl py-3 pl-12 pr-4 focus:border-accent outline-none transition-colors text-sm text-text-primary"
                       required
                     />
                   </div>
 
                   <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary/40" size={18} />
                     <input
                       type="text"
                       placeholder="Artist Name"
                       value={artist}
                       onChange={(e) => setArtist(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:border-neon-cyan outline-none transition-colors"
+                      className="w-full bg-glass border border-glass-border rounded-xl py-3 pl-12 pr-4 focus:border-accent outline-none transition-colors text-sm text-text-primary"
                       required
                     />
                   </div>
 
                   <div className="relative">
-                    <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                    <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary/40" size={18} />
                     <input
                       type="url"
                       placeholder="Cover Image URL (Optional)"
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:border-neon-cyan outline-none transition-colors"
+                      className="w-full bg-glass border border-glass-border rounded-xl py-3 pl-12 pr-4 focus:border-accent outline-none transition-colors text-sm text-text-primary"
                     />
                   </div>
                 </div>
 
-                <NeonButton
+                <PremiumButton
                   type="submit"
                   disabled={isUploading || !file}
-                  className="w-full py-4 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 flex items-center justify-center gap-2"
                 >
                   {isUploading ? (
                     <>
@@ -162,7 +162,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSuc
                   ) : (
                     'Publish Track'
                   )}
-                </NeonButton>
+                </PremiumButton>
               </form>
             </GlassCard>
           </motion.div>

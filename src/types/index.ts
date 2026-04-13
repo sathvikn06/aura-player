@@ -8,6 +8,8 @@ export interface Song {
   duration: number;
   file_hash?: string;
   isCached?: boolean;
+  lyrics?: string;
+  playCount?: number;
 }
 
 export interface UserProfile {

@@ -22,7 +22,18 @@ export const songService = {
       return [];
     }
 
-    return data as Song[];
+    const sampleLyrics = [
+      "Naa Autograph lo... Prathi page lo... Nee gnapakam... Nee gnapakam...",
+      "Butta Bomma Butta Bomma... Nannu suttukuntive... Zindagi ne kalla mundu... Nilabettinaave...",
+      "Samajavaragamana... Choosi choosi... Nee venake thiruguthunna...",
+      "Ramuloo Ramulaa... Nannu aagam cheshindiro... Nee kalla gajula chappudu...",
+    ];
+
+    return (data as Song[]).map((song, index) => ({
+      ...song,
+      lyrics: song.lyrics || sampleLyrics[index % sampleLyrics.length],
+      playCount: song.playCount || Math.floor(Math.random() * 1000)
+    }));
   },
 
   /**
@@ -93,6 +104,30 @@ export const songService = {
       return { success: true };
     } catch (error: any) {
       console.error('Upload failed:', error);
+      return { success: false, error: error.message || 'Unknown error occurred' };
+    }
+  },
+
+  /**
+   * Updates song metadata in the database.
+   */
+  async updateSongMetadata(
+    songId: string, 
+    metadata: { title?: string; artist?: string; image_url?: string }
+  ): Promise<{ success: boolean; error?: string }> {
+    const supabase = getSupabase();
+    if (!supabase) return { success: false, error: 'Supabase not configured' };
+
+    try {
+      const { error } = await supabase
+        .from('songs')
+        .update(metadata)
+        .eq('id', songId);
+
+      if (error) throw error;
+      return { success: true };
+    } catch (error: any) {
+      console.error('Update failed:', error);
       return { success: false, error: error.message || 'Unknown error occurred' };
     }
   }

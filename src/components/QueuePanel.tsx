@@ -50,18 +50,18 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-surface border-l border-white/5 z-50 flex flex-col shadow-2xl"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-surface border-l border-glass-border z-50 flex flex-col shadow-2xl"
           >
-            <div className="p-6 border-b border-white/5 flex items-center justify-between">
+            <div className="p-6 border-b border-glass-border flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold tracking-tight">Queue</h2>
-                <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest mt-1">
+                <h2 className="text-lg font-bold tracking-tight text-text-primary">Queue</h2>
+                <p className="text-[10px] font-bold text-text-secondary/40 uppercase tracking-widest mt-1">
                   {queue.length} Tracks
                 </p>
               </div>
               <button 
                 onClick={onClose}
-                className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/40 hover:text-white"
+                className="p-2 hover:bg-glass rounded-full transition-colors text-text-secondary/40 hover:text-text-primary"
               >
                 <X size={20} />
               </button>
@@ -69,8 +69,8 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
 
             <div className="flex-1 overflow-y-auto custom-scrollbar p-3">
               {queue.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-white/20 gap-4">
-                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+                <div className="h-full flex flex-col items-center justify-center text-text-secondary/20 gap-4">
+                  <div className="w-12 h-12 rounded-full bg-glass flex items-center justify-center">
                     <Music size={24} />
                   </div>
                   <p className="text-sm font-medium">Queue is empty</p>
@@ -97,13 +97,13 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
                                 {...provided.draggableProps}
                                 className={cn(
                                   "group flex items-center gap-3 p-2 rounded-lg transition-all",
-                                  snapshot.isDragging ? "bg-white/10 shadow-2xl scale-[1.02] z-50" : "hover:bg-white/[0.02]",
-                                  currentIndex === index ? "bg-white/5" : ""
+                                  snapshot.isDragging ? "bg-accent/20 shadow-2xl scale-[1.02] z-50" : "hover:bg-glass",
+                                  currentIndex === index ? "bg-accent/10" : ""
                                 )}
                               >
                                 <div 
                                   {...provided.dragHandleProps}
-                                  className="text-white/10 group-hover:text-white/20 cursor-grab active:cursor-grabbing"
+                                  className="text-text-secondary/20 group-hover:text-text-secondary/40 cursor-grab active:cursor-grabbing"
                                 >
                                   <GripVertical size={16} />
                                 </div>
@@ -134,16 +134,16 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
                                 >
                                   <h4 className={cn(
                                     "text-xs font-semibold truncate",
-                                    currentIndex === index ? "text-accent" : "text-white/90"
+                                    currentIndex === index ? "text-accent" : "text-text-primary"
                                   )}>
                                     {song.title}
                                   </h4>
-                                  <p className="text-[10px] text-white/40 truncate font-medium">{song.artist}</p>
+                                  <p className="text-[10px] text-text-secondary/40 truncate font-medium">{song.artist}</p>
                                 </div>
 
                                 <button 
                                   onClick={() => removeFromQueue(song.id)}
-                                  className="p-1.5 text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                                  className="p-1.5 text-text-secondary/20 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
                                 >
                                   <X size={14} />
                                 </button>
@@ -159,10 +159,10 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
               )}
             </div>
 
-            <div className="p-6 border-t border-white/5">
+            <div className="p-6 border-t border-glass-border">
               <button 
                 onClick={onClose}
-                className="w-full py-2.5 rounded-lg bg-white text-black font-bold text-sm hover:opacity-90 transition-opacity"
+                className="w-full py-2.5 rounded-lg bg-accent text-white font-bold text-sm hover:opacity-90 transition-opacity"
               >
                 Close
               </button>
